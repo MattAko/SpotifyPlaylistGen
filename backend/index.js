@@ -81,7 +81,7 @@ function getUserID(access_token){
     .then((response) => {
         console.log('Get user ID successful...');
         console.log(response)
-        return 'success'
+        return response.data.id
     })
     .catch((error) => {
         console.log('There was an error getting the user ID');
