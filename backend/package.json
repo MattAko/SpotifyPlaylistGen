@@ -1,0 +1,22 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend for playlist_generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon index.js"
+  },
+  "keywords": [
+    "spotify",
+    "playlist",
+    "generator"
+  ],
+  "author": "matthew roberts",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "buffer": "^6.0.3",
+    "express": "^4.17.1"
+  }
+}
