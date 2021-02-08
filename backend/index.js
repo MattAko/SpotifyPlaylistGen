@@ -32,7 +32,8 @@ app.get('/login', function(req, res) {
     
 /*
     @desc: Callback route after user login
-    Attempt to retrieve user access token and refresh tokens
+    Retrieve user access token and refresh tokens
+    Then, retrieve user info and return it to user
 */
 app.get('/callback', jsonParser, (req, res) => {
     if(req.query.code === 'undefined'){
@@ -66,8 +67,11 @@ app.get('/callback', jsonParser, (req, res) => {
             })
             .then((response) => {
                 console.log('Get user ID successful...');
+                console.log(response.data.images[0].url);
                 res
                     .cookie('id', response.data.id)
+                    .cookie('name', response.data.display_name)
+                    .cookie('photo_url', response.data.images[0].url)
                     .redirect('http://localhost:3000');
             })
             .catch((error) => {
