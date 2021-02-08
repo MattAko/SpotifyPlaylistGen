@@ -51,10 +51,10 @@ function NavBar(){
                 <button onClick={login} className='bg-emerald-600 rounded-lg px-4 py-2'>Log In</button>
             </div>
             <div id='profilePicture'>
-                <img className='h-10 w-10 rounded-full ' src={userPhoto} alt='ProfilePic'></img>
+                <img className='h-10 w-10 rounded-full mx-4' src={userPhoto} alt='ProfilePic'></img>
             </div>
             <div id='username'>
-                <a className='px-4 py-2 border-b-2 border-transparent hover:border-emerald-600' href={`https://open.spotify.com/user/${userID}`} target='_blank' rel='noreferrer'>{username}</a>
+                <a className='py-2 border-b-2 border-transparent hover:border-emerald-600' href={`https://open.spotify.com/user/${userID}`} target='_blank' rel='noreferrer'>{username}</a>
             </div>
             
         </header>
