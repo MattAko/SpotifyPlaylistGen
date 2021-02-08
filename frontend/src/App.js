@@ -3,7 +3,7 @@ import './index.css';
 
 function App() {
   return (
-    <div className='container mx-auto'>
+    <div className='bg-gray-800 h-screen'>
       
     </div>
   );
