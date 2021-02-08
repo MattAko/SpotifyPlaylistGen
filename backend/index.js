@@ -4,6 +4,7 @@ var Buffer = require('buffer/').Buffer;
 var axios = require('axios');
 var jsonParser = bodyParser.json();
 var app = express();
+var cors = require('cors');
 
 var secrets = require('./secrets.json');
 var my_client_id = secrets.my_client_id;
@@ -22,7 +23,7 @@ app.listen(port, () => {
 app.get('/login', function(req, res) {
     var scopes = 'playlist-modify-public playlist-modify-private';
     var redirect_uri = 'http://localhost:5000/callback/';
-    res.redirect('https://accounts.spotify.com/authorize' +
+    res.send('https://accounts.spotify.com/authorize' +
       '?response_type=code' +
       '&client_id=' + my_client_id +
       (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
@@ -57,13 +58,25 @@ app.get('/callback', jsonParser, (req, res) => {
     }
     axios.post('https://accounts.spotify.com/api/token', params, config)
         .then((response) => {
-            console.log()
-            getUserID(response.data.access_token);
-            res.redirect('http://localhost:3000');
+            var access_token = response.data.access_token;
+            axios.get('https://api.spotify.com/v1/me', {
+                headers: {
+                    Authorization: `Bearer ${access_token}`
+                }
+            })
+            .then((response) => {
+                console.log('Get user ID successful...');
+                res
+                    .cookie('id', response.data.id)
+                    .redirect('http://localhost:3000');
+            })
+            .catch((error) => {
+                console.log('There was an error getting the user ID');
+                console.log(error);
+            })
         })
         .catch((error) => {
             console.log('There was an error with retrieving access codes');
-            // console.log(error);
         })
 })
 
@@ -72,21 +85,20 @@ app.get('/callback', jsonParser, (req, res) => {
     @return: string for user ID or failed response
     Endpoint documentation: https://developer.spotify.com/documentation/web-api/reference/#category-users-profile
 */
-function getUserID(access_token){
-    axios.get('https://api.spotify.com/v1/me', {
-        headers: {
-            Authorization: `Bearer ${access_token}`
-        }
-    })
-    .then((response) => {
-        console.log('Get user ID successful...');
-        console.log(response)
-        return response.data.id
-    })
-    .catch((error) => {
-        console.log('There was an error getting the user ID');
-        console.log(error);
-        return 'failed'
-    })
-    
-}
+// function getUserID(access_token){
+//     axios.get('https://api.spotify.com/v1/me', {
+//         headers: {
+//             Authorization: `Bearer ${access_token}`
+//         }
+//     })
+//     .then((response) => {
+//         console.log('Get user ID successful...');
+//         console.log(response)
+//         return response.data.id
+//     })
+//     .catch((error) => {
+//         console.log('There was an error getting the user ID');
+//         console.log(error);
+//         return 'failed'
+//     })
+// }
